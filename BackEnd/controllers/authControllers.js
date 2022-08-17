@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
 
 const authController = {
@@ -14,9 +14,10 @@ const authController = {
                 password: hashed,
             });
 
-            const user = await newUser.save();
-            res.status(200).json(user);
+            await newUser.save();
+            res.status(200).json(newUser);
         } catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     },
