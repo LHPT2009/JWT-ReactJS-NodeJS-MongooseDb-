@@ -1,6 +1,14 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../Redux/apiRequest";
+import { useNavigate } from "react-router-dom";
 import "./home.css";
 
 const HomePage = () => {
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const userList = useSelector((state) => state.users.users?.allUsers);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   //DUMMY DATA
   const userData = [
     {
@@ -27,13 +35,21 @@ const HomePage = () => {
     {
       username: "kellynguyen1122",
     },
-    
+
   ];
+  useEffect(() => {
+    if (!user) {
+      navigate("login");
+    }
+    if (user?.accessToken) {
+      getAllUsers(user?.accessToken, dispatch);
+    }
+  }, []);
   return (
     <main className="home-container">
       <div className="home-title">User List</div>
       <div className="home-userlist">
-        {userData.map((user) => {
+        {userList?.map((user) => {
           return (
             <div className="user-container">
               <div className="home-user">{user.username}</div>
